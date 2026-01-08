@@ -17,8 +17,6 @@ This repo contains basic project scaffolding and dependencies for running a Fast
 This project provides a FastAPI-based foundation for building agentic AI systems (agents that coordinate tasks, call models, or orchestrate workflows). It focuses on a small, understandable structure so you can iterate quickly.
 
 ## Requirements
-
-- Python 3.10+ (recommended)
 - See [requirements.txt](requirements.txt) for Python dependencies.
 
 ## Installation
@@ -42,28 +40,14 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-## Usage
-
-Run the FastAPI app with Uvicorn. Replace `main:app` with the actual module path if different (for example `app.main:app`):
+## Setup the environment variables
 
 ```bash
-uvicorn main:app --reload --host 0.0.0.0 --port 8000
+$ cp .env.example .env
 ```
 
-Open http://127.0.0.1:8000/docs to use the automatic API docs.
 
-## Development
 
-- Keep dependencies in [requirements.txt](requirements.txt).
-- Use environment variables or a `.env` file for secrets/configuration.
-- When adding new endpoints or agent components, add tests and update docs.
-
-Example quick dev workflow (WSL / Bash):
-
-```bash
-source .venv/bin/activate
-uvicorn main:app --reload
-```
 
 ## Contributing
 
