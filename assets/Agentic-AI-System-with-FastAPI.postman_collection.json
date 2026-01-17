@@ -1,0 +1,49 @@
+{
+  "info": {
+    "_postman_id": "55b542a6-9ec1-4012-96e1-dbc81cc75e4e",
+    "name": "Agentic-AI-System-with-FastAPI",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "51583902",
+    "_collection_link": "https://go.postman.co/collection/51583902-55b542a6-9ec1-4012-96e1-dbc81cc75e4e?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "welcome-request",
+      "request": {
+        "method": "GET",
+        "header": []
+      },
+      "response": []
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "api",
+      "value": ""
+    }
+  ]
+}
