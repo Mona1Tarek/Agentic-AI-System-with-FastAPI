@@ -2,7 +2,7 @@ from fastapi import FastAPI, APIRouter, Depends, UploadFile, status
 from fastapi.responses import JSONResponse
 import os
 from helpers import get_settings, Settings
-from controllers import DataController
+from controllers import DataController, ProjectController
 
 
 # create the router
@@ -26,12 +26,20 @@ async def upload_data(project_id: str, file: UploadFile, app_settings: Settings 
                 "Signal": signal
             }
         )
-    else:
-        return {
-        "Status":is_valid,
-        "Signal":signal
-    }
+    # else:
+    #     return {
+    #     "Status":is_valid,
+    #     "Signal":signal
+    # }
     
+    # get the project dir path that will have the file
+    project_dir_path = ProjectController().get_project_path(project_id=project_id)
+    
+    # get the file path itself  (why?!)
+    file_path = os.path.join(
+        project_dir_path,
+        file.file_name
+    )
     
     
     
