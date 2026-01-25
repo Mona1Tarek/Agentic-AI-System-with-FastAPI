@@ -1,8 +1,9 @@
-# for common things used in all controllers
+""" for common things used in all controllers, e.g., app_settings"""
 
-# e.g., app_settings
 from helpers import get_settings, Settings
 import os
+import random
+import string
 
 class BaseController:
     def __init__(self):
@@ -14,3 +15,6 @@ class BaseController:
             self.base_dir,
             "assets/files",
         )
+        
+    def generate_random_string(self, length: int=12):
+        return ''.join(random.choices(string.ascii_lowercase + string.digits, k=length))
