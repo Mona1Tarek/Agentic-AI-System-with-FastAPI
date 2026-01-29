@@ -48,6 +48,6 @@ class DataController(BaseController):       # to inherit from BaseController (as
                 random_key + "_" + clean_file_name
             )
             
-        return new_file_path
+        return new_file_path, random_key + "_" + clean_file_name
         
     
