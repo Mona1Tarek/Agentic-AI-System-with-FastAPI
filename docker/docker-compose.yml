@@ -1,0 +1,15 @@
+services:
+  mongodb:    #define the service name 
+    image: mongo:7.0.29-jammy
+    container_name: mongodb     # could be anything just 
+    ports:
+      - "27007:27017"
+    volumes:
+      - ./mongodb:/data/db
+    networks:
+      - backend
+
+    restart: always
+
+networks:
+  backend:
