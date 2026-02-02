@@ -31,7 +31,7 @@ class ProcessController(BaseController):
         return None 
     
     def get_file_content(self,file_id: str):
-        loader = self. get_file_loader(file_id= file_id)    
+        loader = self.get_file_loader(file_id= file_id)    
         # bec it's a method of this class so needs self, and loader is a local variable Exists only inside this function
         
         return loader.load()    # this return a list of object of the type document(page_content, metadata)

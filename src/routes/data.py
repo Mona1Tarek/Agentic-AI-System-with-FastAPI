@@ -1,4 +1,4 @@
-from fastapi import FastAPI, APIRouter, Depends, UploadFile, status
+from fastapi import FastAPI, APIRouter, Depends, UploadFile, status, Request
 from fastapi.responses import JSONResponse
 import os
 from helpers import get_settings, Settings
@@ -7,6 +7,8 @@ import aiofiles as aiof
 from models import ResponseSignal
 import logging
 from .schemes.data import ProcessRequest
+from models import ProjectModel, ChunkModel
+from models.db_schemes import DataChunk
 
 logger = logging.getLogger("uvicorn.error")
 
@@ -19,7 +21,11 @@ data_router = APIRouter(
 
 # it recives a file and uploads it to the system, using ID
 @data_router.post("/upload/{project_id}")  # we need this prefix also to call the route
-async def upload_data(project_id: str, file: UploadFile, app_settings: Settings = Depends(get_settings)):
+async def upload_data(request:Request, project_id: str, file: UploadFile, app_settings: Settings = Depends(get_settings)):
+
+    project_model = ProjectModel(db_client=request.app.db_client)
+    
+    project_record = await project_model.get_project_or_create_one(project_id=project_id)   # don't forget that using async function must using await to call it
 
     data_controller_obj = DataController()
 
@@ -61,17 +67,21 @@ async def upload_data(project_id: str, file: UploadFile, app_settings: Settings 
     return JSONResponse(
             content={
                 "Signal": ResponseSignal.FILE_UPLOAD_SUCCESS.value,
-                "File_ID": file_id
+                "File_ID": file_id,
             }
         )
     
 # first processing request (chunking the uploaded file)
 @data_router.post("/process/{project_id}") 
-async def process_data(project_id: str, process_request: ProcessRequest):
+async def process_data(request: Request, project_id: str, process_request: ProcessRequest):
     
     file_id = process_request.file_id
     chunk_size = process_request.chunk_size
     overlap_size = process_request.overlap_size
+    do_reset = process_request.do_reset
+    
+    project_model = ProjectModel(db_client=request.app.db_client)
+    project_record = await project_model.get_project_or_create_one(project_id=project_id)
     
     process_controller = ProcessController(project_id=project_id)
     
@@ -87,4 +97,29 @@ async def process_data(project_id: str, process_request: ProcessRequest):
             }
         )
         
-    return file_chunks
+    file_chunks_rec = [
+        DataChunk(
+            chunk_text = chunk.page_content,
+            chunk_metadata = chunk.metadata,
+            chunk_order = i+1,
+            chunk_project_id = project_record.id,
+        )
+        for i, chunk in enumerate(file_chunks)
+    ]
+
+    chunk_model = ChunkModel(db_client=request.app.db_client)
+
+    # if this id was already there, delete it and add the new
+    if do_reset ==1:
+        _ = await chunk_model.delete_chunks_by_project_id(project_id=project_record.id)
+
+
+    no_records = await chunk_model.insert_many_chunks(chunks=file_chunks_rec)
+    
+
+    return JSONResponse(
+            content={
+                "Signal": ResponseSignal.PROCESSING_SUCCESS.value,
+                "Inserted_Chunks": no_records
+            }
+        )
