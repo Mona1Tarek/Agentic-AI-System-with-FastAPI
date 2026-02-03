@@ -109,7 +109,6 @@ async def process_data(request: Request, project_id: str, process_request: Proce
 
     chunk_model = ChunkModel(db_client=request.app.db_client)
 
-    # if this id was already there, delete it and add the new
     if do_reset ==1:
         _ = await chunk_model.delete_chunks_by_project_id(project_id=project_record.id)
 
