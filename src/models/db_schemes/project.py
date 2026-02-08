@@ -18,3 +18,15 @@ class Project(BaseModel):
     
     class Config:
         arbitrary_types_allowed = True      # to raise error for ObjectId or something similar
+        
+    # creating a static function
+    @classmethod
+    def get_indexes(cls):
+        
+        return[
+            {
+                "key": [("project_id",1)],        # 1 --> ascending order
+                "name": "project_id_index_1",
+                "unique": True
+            }
+        ]

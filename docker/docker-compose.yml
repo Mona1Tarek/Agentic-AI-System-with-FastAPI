@@ -1,11 +1,19 @@
 services:
   mongodb:    #define the service name 
     image: mongo:7.0.29-jammy
-    container_name: mongodb     # could be anything just 
+
+    container_name: mongodb     # could be anything 
+
     ports:
       - "27007:27017"
+
     volumes:
-      - ./mongodb:/data/db
+      - mongodata:/data/db
+
+    environment:    # admin credentials
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
+
     networks:
       - backend
 
@@ -13,3 +21,6 @@ services:
 
 networks:
   backend:
+
+volumes:
+    mongodata:

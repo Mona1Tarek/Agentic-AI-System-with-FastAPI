@@ -1,0 +1,27 @@
+1. Open from windows normaly, then from the terminal choose: Ubuntu[wsl]
+
+2. Activate the environment we are working in using Conda.
+conda activate mini-rag-app
+
+3. cd src
+
+4. Running the server:
+uvicorn main:app --reload --host 0.0.0.0 --port 5000
+
+
+
+Docker (just for local development)
+1. for stoping any past containers: 
+sudo docker stop $(sudo docker ps -aq)
+
+2. remove all the stopped containers:
+sudo docker rm $(sudo docker ps -aq)  
+
+3. remove the images even the downloaded ones from docker-hub
+sudo docker rmi $(sudo docker images -q)
+
+4. removing all the volumes:
+sudo docker volume rm $(sudo docker volume ls -q)
+
+5. clean all:
+sudo docker system  prune --all
